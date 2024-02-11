@@ -35,14 +35,15 @@ test_download = function(
 download_raw_samples = function(
     remote_file = remote_file_name,
     local_file = local_file_name,
-    checking = TRUE
+    checking = TRUE,
+    force = FALSE
     ){
   
   while(checking == TRUE) {
     
-    # If the file doesn't exist then go get it
+    # If the file doesn't exist (or we are in force mode) then go get it
     
-    if(!file.exists(local_file_name)){
+    if(!file.exists(local_file_name) || force == TRUE){
       odb <- get_business_onedrive()
       odb$download_file(src=remote_file_name, dest=local_file_name)
     }
@@ -91,10 +92,11 @@ compress_raw_samples = function(
 
 make_binned_sequences = function(
     verbose=FALSE,
+    force=FALSE,
     compressed_file = compressed_file_name,
     binned_file = binned_file_name
     ){
-  if(file.exists(binned_file)){
+  if(file.exists(binned_file) && force==FALSE){
     return(message("binned sequence file exists, not binning"))
   } 
   message("start making binned sequences")

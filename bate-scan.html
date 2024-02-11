@@ -79,12 +79,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="data-pre-processing" class="level2">
 <h2 class="anchored" data-anchor-id="data-pre-processing">Data pre-processing</h2>
-<ul>
-<li>Where to find the raw eye-tracking data
-<ul>
-<li>In my OneDrive on the root at: <a href="https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt">https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt</a></li>
-</ul></li>
-</ul>
+<p>The raw data are at <a href="https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt">https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt</a>. This is a very large file circa 5GB with nearly 60 million rows so it is not distributed with the code. However the binned sequences are supplied with the code.</p>
 <p>Filter the data to allow only correct responses, replacing scan paths for inaccurate trials with NA so the structure of the design is preserved and we don’t end up trying to merge sparse matrices.</p>
 <p>Filter the data to allow only samples that occurred before the key-press where they respond.</p>
 <p>Recode the following participant labels: C17, C26, C35, C38, C44, C62 and C70 were coded as Controls and should be Develelopmental Prosopagnosics. C13 and C68 are currently coded as Controls and should be Super Recognisers.</p>

@@ -8,18 +8,18 @@ format:
 ```{r, eval=F, include=F}
 source("dataset/functions.R")
 invisible(gc())
-download_raw_samples()
+download_raw_samples(force = FALSE)
 invisible(gc())
 compress_raw_samples(force = FALSE)
 invisible(gc())
-make_binned_sequences()
+make_binned_sequences(force = FALSE)
 invisible(gc())
 ```
 
 ## Data pre-processing
 
 
-The raw data are at [https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt](https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt). This is a very large file circa 5GB with nearly 50 million rows so it is not distributed with the code. However the binned sequences are supplied with the code.
+The raw data are at [https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt](https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt). This is a very large file circa 5GB with nearly 60 million rows so it is not distributed with the code. However the binned sequences are supplied with the code.
 
 Filter the data to allow only correct responses, replacing scan paths for inaccurate trials with NA so the structure of the design is preserved and we don't end up trying to merge sparse matrices.
 
