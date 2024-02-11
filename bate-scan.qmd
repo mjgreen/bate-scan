@@ -69,7 +69,7 @@ The similarity here refers to how alike the scanpaths of a given participant wer
 
 #### Part 1, same-angle comparisons
 
-Each participant's scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity _in the same angle_.
+Each participant's scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity ***in the same angle***.
 
 For Controls this is $(45-1)=44$ comparisons for each angle of each stimulus identity.
 For DPs this is $(15-1)=14$ comparisons for each angle of each stimulus identity.
@@ -81,7 +81,7 @@ The similarity here refers to how alike the scanpaths are among different member
 
 #### Part 2, different-angle comparisons
 
-Each participant's scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity _in the other three different angles_.
+Each participant's scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity ***in the other three different angles***.
 
 For Controls This will be $(45-1) * (4-1) = 132$ comparisons per stimulus identity (44 for each angle of each stimulus identity).
 For DPs This will be $(15-1) * (4-1) = 42$ comparisons per stimulus identity (14 for each angle of each stimulus identity).
