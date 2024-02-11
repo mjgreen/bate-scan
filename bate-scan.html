@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>bate-scan</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="bate-scan_files/libs/clipboard/clipboard.min.js"></script>
+<script src="bate-scan_files/libs/quarto-html/quarto.js"></script>
+<script src="bate-scan_files/libs/quarto-html/popper.min.js"></script>
+<script src="bate-scan_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="bate-scan_files/libs/quarto-html/anchor.min.js"></script>
+<link href="bate-scan_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="bate-scan_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="bate-scan_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="bate-scan_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="bate-scan_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-pre-processing" id="toc-data-pre-processing" class="nav-link active" data-scroll-target="#data-pre-processing">Data pre-processing</a></li>
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
+  <li><a href="#data-analysis" id="toc-data-analysis" class="nav-link" data-scroll-target="#data-analysis">Data Analysis</a>
+  <ul class="collapse">
+  <li><a href="#analysis-1-replication-of-the-eye-movement-based-memory-effect" id="toc-analysis-1-replication-of-the-eye-movement-based-memory-effect" class="nav-link" data-scroll-target="#analysis-1-replication-of-the-eye-movement-based-memory-effect">Analysis 1: Replication of the eye-movement based memory effect</a></li>
+  <li><a href="#analysis-2-within-individual-scanpath-similarity-is-scanning-of-the-same-familiar-identity-more-similar" id="toc-analysis-2-within-individual-scanpath-similarity-is-scanning-of-the-same-familiar-identity-more-similar" class="nav-link" data-scroll-target="#analysis-2-within-individual-scanpath-similarity-is-scanning-of-the-same-familiar-identity-more-similar">Analysis 2: Within-individual scanpath similarity: Is scanning of the same familiar identity more similar?</a></li>
+  <li><a href="#analysis-3.-within-group-scanpath-similarity-are-the-similarities-across-the-same-identity-common-across-perceivers-of-the-same-group-or-idiosyncratic-even-among-higher-ability-participants" id="toc-analysis-3.-within-group-scanpath-similarity-are-the-similarities-across-the-same-identity-common-across-perceivers-of-the-same-group-or-idiosyncratic-even-among-higher-ability-participants" class="nav-link" data-scroll-target="#analysis-3.-within-group-scanpath-similarity-are-the-similarities-across-the-same-identity-common-across-perceivers-of-the-same-group-or-idiosyncratic-even-among-higher-ability-participants">Analysis 3. Within-group scanpath similarity: Are the similarities across the same identity common across perceivers of the same group, or idiosyncratic even among higher ability participants?</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">bate-scan</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="data-pre-processing" class="level2">
+<h2 class="anchored" data-anchor-id="data-pre-processing">Data pre-processing</h2>
+<ul>
+<li>Where to find the raw eye-tracking data
+<ul>
+<li>In my OneDrive on the root at: <a href="https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt">https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt</a></li>
+</ul></li>
+</ul>
+<p>Filter the data to allow only correct responses, replacing scan paths for inaccurate trials with NA so the structure of the design is preserved and we don’t end up trying to merge sparse matrices.</p>
+<p>Filter the data to allow only samples that occurred before the key-press where they respond.</p>
+<p>Recode the following participant labels: C17, C26, C35, C38, C44, C62 and C70 were coded as Controls and should be Develelopmental Prosopagnosics. C13 and C68 are currently coded as Controls and should be Super Recognisers.</p>
+<p>Famous faces have codes like H10A, L10A. This is actually one identity, identity number 10. It’s two different angles of the same identity, but they are both coded A. So we need to do some careful renaming of the stimulus to yield consistent first character coding for famous; retain 2nd and 3rd characters for identity within famous; recode 4th character so that individual identities have A,B,C,D not A,A,B,B</p>
+<p>There were 40 Controls, 15 Developmental Prosoganosics (DP) and 15 Super Recognisers (SR). Each participant saw the same 20 Famous faces and 20 novel faces four times each, once in each of three different angles.</p>
+</section>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
+<p>The leading theory of face learning proposes that an understanding of the unique source of variation is required for each individual face that we know (the within-person variability hypothesis - Burton). Further, different perceivers may rely on different sources of variation. This hypothesis receives support from findings in the eye-movement literature, where an eye-movement based memory effect is characterised by more unique scanpaths for familiar compared to novel faces (given a general schema is elicited for novel faces where there is no stored representation to guide scanning towards the most informative region).</p>
+<p>If these theories are correct, we would predict that the same perceiver’s scanpaths would be similar for different images of the same familiar identity, but these would differ from (a) scanpaths that the same individual elicits to familiar faces of different identities, and (b) scanpaths that other individuals elicit to the same familiar images.</p>
+<p>Further, scanpaths that a particular perceiver elicits to different images of the same unknown (novel) person would also be similar, but these would also resemble scanpaths that (a) the same perceiver elicits to novel faces of other identities, and (b) different perceiver elicit to the same identities.</p>
+<p>An extension of this hypothesis is that the unique sources of identity information may become less varied as face recognition ability increases. That is, it is possible that individuals who excel at face recognition may do so because they are particularly adept at locating the most informative region of the face for a particular identity.</p>
+<p>From this perspective, it is possible that different super-recognisers elicit similar scanpaths to familiar faces of the same identity, and these are more unique in control participants and even more so in those with developmental prosopagnosia.</p>
+<p>Other very recent research suggests an alternative hypothesis, arguing against the within-person variability hypothesis by finding that super-recognisers are just as good at recognising unfamiliar faces as typical perceivers who have high familiarity with the same individuals (Yovel &amp; Bate, 2023). This suggests that exposure to unique sources of variability may not underpin familiar face recognition at all. Instead, it is possible that better recognisers use similar sources of facial information for all familiar faces (all even all faces per se), but this has been obscured in eye-movement studies to date as they have not considered individual differences in face recognition ability as a predictive factor.</p>
+</section>
+<section id="data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="data-analysis">Data Analysis</h2>
+<section id="analysis-1-replication-of-the-eye-movement-based-memory-effect" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-1-replication-of-the-eye-movement-based-memory-effect">Analysis 1: Replication of the eye-movement based memory effect</h3>
+<p>An initial analysis will seek to replicate the existing EMBME, where it has been shown that scanpaths elicited to famous faces are less similar than those elicited to unknown (novel/distractor) faces. To do this we would need to, per participant:</p>
+<ul>
+<li><p>Compare scanpaths of each famous image to all other famous images of different identities (but not to the other three of the same identity)</p></li>
+<li><p>Compare scanpaths of each novel (distractor) image to all other novel images of different identities (but not to the other three of the same identity).</p></li>
+</ul>
+<p>For each participant, this will require 76 pairwise comparisons for each of the 80 images in the famous and novel conditions. An average of the resulting 6080 comparisons in each condition should be calculated, so there is one average score per participant in the famous and novel conditions.</p>
+</section>
+<section id="analysis-2-within-individual-scanpath-similarity-is-scanning-of-the-same-familiar-identity-more-similar" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-2-within-individual-scanpath-similarity-is-scanning-of-the-same-familiar-identity-more-similar">Analysis 2: Within-individual scanpath similarity: Is scanning of the same familiar identity more similar?</h3>
+<p>Each participant’s scanpath for a given stimulus identity in a given angle is compared to the same participant’s scanpaths for the same stimulus identity in each of the other three angles. This makes 6 comparisons of a given participant’s scanpaths for each stimulus identity: AB, AC, AD, BC, BD, CD. The 6 comparisons for each participant’s scanpaths of each stimulus identity are then averaged. Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately.</p>
+<p>The similarity here refers to how alike the scanpaths of a given participant were across various different angles of the same stimulus identity.</p>
+</section>
+<section id="analysis-3.-within-group-scanpath-similarity-are-the-similarities-across-the-same-identity-common-across-perceivers-of-the-same-group-or-idiosyncratic-even-among-higher-ability-participants" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-3.-within-group-scanpath-similarity-are-the-similarities-across-the-same-identity-common-across-perceivers-of-the-same-group-or-idiosyncratic-even-among-higher-ability-participants">Analysis 3. Within-group scanpath similarity: Are the similarities across the same identity common across perceivers of the same group, or idiosyncratic even among higher ability participants?</h3>
+<section id="part-1-same-angle-comparisons" class="level4">
+<h4 class="anchored" data-anchor-id="part-1-same-angle-comparisons">Part 1, same-angle comparisons</h4>
+<p>Each participant’s scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity <em>in the same angle</em>.</p>
+<p>For Controls this is <span class="math inline">\((45-1)=44\)</span> comparisons for each angle of each stimulus identity. For DPs this is <span class="math inline">\((15-1)=14\)</span> comparisons for each angle of each stimulus identity. For SRs this is <span class="math inline">\((15-1)=14\)</span> comparisons for each angle of each stimulus identity.</p>
+<p>The 44 (For Control group) comparisons for each participant’s scanpaths of each stimulus identity are then averaged. Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately.</p>
+<p>The similarity here refers to how alike the scanpaths are among different members of the same participant group when seeing the exact same picture (same angle of the same stimulus identity).</p>
+</section>
+<section id="part-2-different-angle-comparisons" class="level4">
+<h4 class="anchored" data-anchor-id="part-2-different-angle-comparisons">Part 2, different-angle comparisons</h4>
+<p>Each participant’s scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity <em>in the other three different angles</em>.</p>
+<p>For Controls This will be <span class="math inline">\((45-1) * (4-1) = 132\)</span> comparisons per stimulus identity (44 for each angle of each stimulus identity). For DPs This will be <span class="math inline">\((15-1) * (4-1) = 42\)</span> comparisons per stimulus identity (14 for each angle of each stimulus identity). For SRs This will be <span class="math inline">\((15-1) * (4-1) = 42\)</span> comparisons per stimulus identity (14 for each angle of each stimulus identity).</p>
+<p>The 44 (For Control group) comparisons for each participant’s scanpaths of each stimulus identity are then averaged. Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately.</p>
+<p>The similarity here refers to how alike the scanpaths of members of the same group were to different angles of the same face (different angles of the same stimulus identity).</p>
+<p>These data can then be entered entered into a 2 (familiarity: famous, novel) x 2 (image: same, different) x 3 (group: DP, SR control) mixed-measures ANOVA with repeated-measures on the familiarity and image factors.</p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

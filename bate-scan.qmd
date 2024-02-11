@@ -1,0 +1,94 @@
+---
+title: "bate-scan"
+format:
+  html:
+    toc: true
+---
+
+```{r, eval=F, include=F}
+source("dataset/functions.R")
+invisible(gc())
+download_raw_samples()
+invisible(gc())
+compress_raw_samples(force = FALSE)
+invisible(gc())
+make_binned_sequences()
+invisible(gc())
+```
+
+## Data pre-processing
+
+
+The raw data are at [https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt](https://livebournemouthac-my.sharepoint.com/personal/mgreen_bournemouth_ac_uk/Documents/SAMPLES2.txt). This is a very large file circa 5GB with nearly 50 million rows so it is not distributed with the code. However the binned sequences are supplied with the code.
+
+Filter the data to allow only correct responses, replacing scan paths for inaccurate trials with NA so the structure of the design is preserved and we don't end up trying to merge sparse matrices.
+
+Filter the data to allow only samples that occurred before the key-press where they respond.
+
+Recode the following participant labels: C17, C26, C35, C38, C44, C62 and C70 were coded as Controls and should be Develelopmental Prosopagnosics. C13 and C68 are currently coded as Controls and should be Super Recognisers.
+
+Famous faces have codes like H10A, L10A. This is actually one identity, identity number 10. It's two different angles of the same identity, but they are both coded A. So we need to do some careful renaming of the stimulus to yield consistent first character coding for famous; retain 2nd and 3rd characters for identity within famous; recode 4th character so that individual identities have A,B,C,D not A,A,B,B
+
+There were 40 Controls, 15 Developmental Prosoganosics (DP) and 15 Super Recognisers (SR). Each participant saw the same 20 Famous faces and 20 novel faces four times each, once in each of three different angles.
+
+## Background
+
+The leading theory of face learning proposes that an understanding of the unique source of variation is required for each individual face that we know (the within-person variability hypothesis - Burton). Further, different perceivers may rely on different sources of variation. This hypothesis receives support from findings in the eye-movement literature, where an eye-movement based memory effect is characterised by more unique scanpaths for familiar compared to novel faces (given a general schema is elicited for novel faces where there is no stored representation to guide scanning towards the most informative region).
+
+If these theories are correct, we would predict that the same perceiver's scanpaths would be similar for different images of the same familiar identity, but these would differ from (a) scanpaths that the same individual elicits to familiar faces of different identities, and (b) scanpaths that other individuals elicit to the same familiar images.
+
+Further, scanpaths that a particular perceiver elicits to different images of the same unknown (novel) person would also be similar, but these would also resemble scanpaths that (a) the same perceiver elicits to novel faces of other identities, and (b) different perceiver elicit to the same identities.
+
+An extension of this hypothesis is that the unique sources of identity information may become less varied as face recognition ability increases. That is, it is possible that individuals who excel at face recognition may do so because they are particularly adept at locating the most informative region of the face for a particular identity. 
+
+From this perspective, it is possible that different super-recognisers elicit similar scanpaths to familiar faces of the same identity, and these are more unique in control participants and even more so in those with developmental prosopagnosia.
+
+Other very recent research suggests an alternative hypothesis, arguing against the within-person variability hypothesis by finding that super-recognisers are just as good at recognising unfamiliar faces as typical perceivers who have high familiarity with the same individuals (Yovel & Bate, 2023). This suggests that exposure to unique sources of variability may not underpin familiar face recognition at all. Instead, it is possible that better recognisers use similar sources of facial information for all familiar faces (all even all faces per se), but this has been obscured in eye-movement studies to date as they have not considered individual differences in face recognition ability as a predictive factor.
+
+## Data Analysis
+
+### Analysis 1: Replication of the eye-movement based memory effect
+
+An initial analysis will seek to replicate the existing EMBME, where it has been shown that scanpaths elicited to  famous faces are less similar than those elicited to unknown (novel/distractor) faces. To do this we
+would need to, per participant:
+
+* Compare scanpaths of each famous image to all other famous images of different identities (but not to the other three of the same identity)
+
+* Compare scanpaths of each novel (distractor) image to all other novel images of different identities (but not to the other three of the same identity).
+
+For each participant, this will require 76 pairwise comparisons for each of the 80 images in the famous and novel conditions. An average of the resulting 6080 comparisons in each condition should be calculated, so there is one average score per participant in the famous and novel conditions.
+
+### Analysis 2: Within-individual scanpath similarity: Is scanning of the same familiar identity more similar?
+
+Each participant's scanpath for a given stimulus identity in a given angle is compared to the same participant's scanpaths for the same stimulus identity in each of the other three angles. This makes 6 comparisons of a given participant's scanpaths for each stimulus identity: AB, AC, AD, BC, BD, CD. The 6 comparisons for each participant's scanpaths of each stimulus identity are then averaged. Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately. 
+
+The similarity here refers to how alike the scanpaths of a given participant were across various different angles of the same stimulus identity.
+
+
+### Analysis 3. Within-group scanpath similarity: Are the similarities across the same identity common across perceivers of the same group, or idiosyncratic even among higher ability participants?
+
+#### Part 1, same-angle comparisons
+
+Each participant's scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity _in the same angle_.
+
+For Controls this is $(45-1)=44$ comparisons for each angle of each stimulus identity.
+For DPs this is $(15-1)=14$ comparisons for each angle of each stimulus identity.
+For SRs this is $(15-1)=14$ comparisons for each angle of each stimulus identity.
+
+The 44 (For Control group) comparisons for each participant's scanpaths of each stimulus identity are then averaged. Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately. 
+
+The similarity here refers to how alike the scanpaths are among different members of the same participant group when seeing the exact same picture (same angle of the same stimulus identity).
+
+#### Part 2, different-angle comparisons
+
+Each participant's scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity _in the other three different angles_.
+
+For Controls This will be $(45-1) * (4-1) = 132$ comparisons per stimulus identity (44 for each angle of each stimulus identity).
+For DPs This will be $(15-1) * (4-1) = 42$ comparisons per stimulus identity (14 for each angle of each stimulus identity).
+For SRs This will be $(15-1) * (4-1) = 42$ comparisons per stimulus identity (14 for each angle of each stimulus identity).
+
+The 44 (For Control group) comparisons for each participant's scanpaths of each stimulus identity are then averaged. Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately. 
+
+The similarity here refers to  how alike the scanpaths of members of the same group were to different angles of the same face (different angles of the same stimulus identity).
+
+These data can then be entered entered into a 2 (familiarity: famous, novel) x 2 (image: same, different) x 3 (group: DP, SR control) mixed-measures ANOVA with repeated-measures on the familiarity and image factors.
