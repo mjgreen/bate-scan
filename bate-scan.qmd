@@ -3,7 +3,13 @@ title: "bate-scan"
 format:
   html:
     toc: true
+    toc-depth: 4
 ---
+
+```{r, echo=F}
+setwd("/home/matt/gits/bate-scan")
+knitr::opts_chunk$set(echo = FALSE)
+```
 
 ```{r, eval=F, include=F}
 source("dataset/functions.R")
@@ -14,6 +20,15 @@ compress_raw_samples(force = FALSE)
 invisible(gc())
 make_binned_sequences(force = FALSE)
 invisible(gc())
+```
+
+```{r, echo=F}
+suppressPackageStartupMessages(library("tidyverse"))
+library("knitr")
+#require("Hmisc")
+#library("afex")
+library("ez")
+suppressPackageStartupMessages(library("kableExtra"))
 ```
 
 ## Data pre-processing
@@ -47,7 +62,9 @@ Other very recent research suggests an alternative hypothesis, arguing against t
 
 ## Data Analysis
 
-### Analysis 1: Replication of the eye-movement based memory effect
+### Analysis 1: Replication of the EMBME
+
+**EMBME: eye-movement based memory effect""
 
 An initial analysis will seek to replicate the existing EMBME, where it has been shown that scanpaths elicited to  famous faces are less similar than those elicited to unknown (novel/distractor) faces. To do this we
 would need to, per participant:
@@ -58,16 +75,18 @@ would need to, per participant:
 
 For each participant, this will require 76 pairwise comparisons for each of the 80 images in the famous and novel conditions. An average of the resulting 6080 comparisons in each condition should be calculated, so there is one average score per participant in the famous and novel conditions.
 
-### Analysis 2: Within-individual scanpath similarity: Is scanning of the same familiar identity more similar?
+### Analysis 2: Within-individual scanpath similarity
+
+**Is scanning of the same familiar identity more similar?**
 
 Each participant's scanpath for a given stimulus identity in a given angle is compared to the same participant's scanpaths for the same stimulus identity in each of the other three angles. This makes 6 comparisons of a given participant's scanpaths for each stimulus identity: AB, AC, AD, BC, BD, CD. The 6 comparisons for each participant's scanpaths of each stimulus identity are then averaged. Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately. 
-
 The similarity here refers to how alike the scanpaths of a given participant were across various different angles of the same stimulus identity.
 
+### Analysis 3. Within-group scanpath similarity
 
-### Analysis 3. Within-group scanpath similarity: Are the similarities across the same identity common across perceivers of the same group, or idiosyncratic even among higher ability participants?
+**Are the similarities across the same identity common across perceivers of the same group, or idiosyncratic even among higher ability participants?**
 
-#### Part 1, same-angle comparisons
+#### Part A, same-angle comparisons
 
 Each participant's scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity ***in the same angle***.
 
@@ -79,7 +98,93 @@ The 44 (For Control group) comparisons for each participant's scanpaths of each 
 
 The similarity here refers to how alike the scanpaths are among different members of the same participant group when seeing the exact same picture (same angle of the same stimulus identity).
 
-#### Part 2, different-angle comparisons
+```{r, echo=F}
+data3a <-  
+  read_csv("./analysis_3/analysis3a/analysis_3a_scanmatch_means.csv",
+           show_col_types = FALSE) %>% 
+  mutate(
+    subj=as_factor(subj),
+    ability=factor(
+      ability,
+      levels=c("devprop", "control", "super"),
+      labels=c("Prosopagnosic", "Control", "Super Recogniser")), 
+    fame=factor(
+      fame,
+      levels=c("famous", "novel"),
+      labels=c("Famous", "Novel")
+    )
+  ) %>% 
+  dplyr::rename(Subject=subj, Ability=ability, Fame=fame, Similarity=mean_sim)
+
+options(dplyr.summarise.inform = FALSE)
+```
+
+::: {.grid}
+::: {.g-col-6}
+```{r}
+ability_x_fame <-
+  data3a %>% 
+  group_by(Ability, Fame) %>% 
+  summarise(Similarity=mean(Similarity, na.rm=TRUE)) %>% 
+  pivot_wider(id_cols=Fame, names_from=Ability, values_from = Similarity)
+
+kable(ability_x_fame, caption="Same-angle", digits=3, align=c('l','c','c','c')) 
+```
+:::
+:::
+
+```{r, out.width="60%"}
+ggplot(data3a, aes(x=Ability, y=Similarity, color=Fame, group=Fame, fill=Fame))+
+  theme_bw()+
+  theme(
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
+    ) +
+   stat_summary(
+     fun.data=mean_cl_normal,position=position_dodge(0.95),geom="errorbar", width=0.5
+     ) +
+  stat_summary(
+    fun=mean,position=position_dodge(width=0.95),geom="bar"
+    )+
+  labs(y="Mean Similarity", title = "Mean similarity of scanpaths made to famous and novel faces, split by group")
+```
+
+```{r, warning=F}
+anova3atype2 = ezANOVA(data=data3a, dv=Similarity, wid=Subject, within=Fame, between=Ability, return_aov = TRUE, type = 2) 
+
+# type 3 is SPSS, type 2 is better for unbalanced data
+
+# Warning: Data is unbalanced (unequal N per group). Make sure you specified a well-considered value for the type argument to ezANOVA().
+
+orig=anova3atype2
+anova3atype2$ANOVA$ges <- NULL
+
+for (i in seq_along(anova3atype2$ANOVA$p)) {
+  anova3atype2$ANOVA$p[i] = round(as.numeric(anova3atype2$ANOVA$p[i]),3)
+  if (anova3atype2$ANOVA$p[i] < 0.05){anova3atype2$ANOVA$`p<.05`[i] = "*"}
+  if (anova3atype2$ANOVA$p[i] < 0.01){anova3atype2$ANOVA$`p<.05`[i] = "**"}
+  if (anova3atype2$ANOVA$p[i] < 0.001){anova3atype2$ANOVA$`p<.05`[i] = "***"}
+  if (anova3atype2$ANOVA$p[i] < 0.001){anova3atype2$ANOVA$p[i]="<0.001"}
+}
+
+names(anova3atype2$ANOVA)=c("Effect", "DFn", "DFd", "F", "p", " ")
+
+
+```
+
+::: {.grid}
+::: {.g-col-6}
+```{r, results='markup'}
+kable(
+  anova3atype2$ANOVA, 
+  row.names=FALSE, 
+  align=c('l','r','r','r','r','l')
+  ) 
+```
+:::
+:::
+
+#### Part B, different-angle comparisons
 
 Each participant's scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity ***in the other three different angles***.
 
@@ -92,3 +197,7 @@ The 44 (For Control group) comparisons for each participant's scanpaths of each 
 The similarity here refers to  how alike the scanpaths of members of the same group were to different angles of the same face (different angles of the same stimulus identity).
 
 These data can then be entered entered into a 2 (familiarity: famous, novel) x 2 (image: same, different) x 3 (group: DP, SR control) mixed-measures ANOVA with repeated-measures on the familiarity and image factors.
+
+#### Combined analysis with same/diff angle as a factor
+
+Hold my place
