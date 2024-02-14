@@ -29,7 +29,7 @@ Recode the following participant labels: C17, C26, C35, C38, C44, C62 and C70 we
 
 Famous faces have codes like H10A, L10A. This is actually one identity, identity number 10. It's two different angles of the same identity, but they are both coded A. So we need to do some careful renaming of the stimulus to yield consistent first character coding for famous; retain 2nd and 3rd characters for identity within famous; recode 4th character so that individual identities have A,B,C,D not A,A,B,B
 
-There were 40 Controls, 15 Developmental Prosoganosics (DP) and 15 Super Recognisers (SR). Each participant saw the same 20 Famous faces and 20 novel faces four times each, once in each of three different angles.
+There were 40 Controls, 15 Developmental Prosoganosics (DP) and 15 Super Recognisers (SR). Each participant saw the same 20 Famous faces and 20 novel faces four times each, once in each of four different angles.
 
 ## Background
 
@@ -75,7 +75,7 @@ For Controls this is $(45-1)=44$ comparisons for each angle of each stimulus ide
 For DPs this is $(15-1)=14$ comparisons for each angle of each stimulus identity.
 For SRs this is $(15-1)=14$ comparisons for each angle of each stimulus identity.
 
-The 44 (For Control group) comparisons for each participant's scanpaths of each stimulus identity are then averaged. Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately. 
+The 44 (For Control group) comparisons for each participant's scanpaths of each stimulus identity in a given angle are then averaged, to give the mean similarity of everyone elses's similarity for that stimulus identity in that angle. Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately, collapsing over different angles of the stimulus identity and different stimulus identities at the same time.
 
 The similarity here refers to how alike the scanpaths are among different members of the same participant group when seeing the exact same picture (same angle of the same stimulus identity).
 
