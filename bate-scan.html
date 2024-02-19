@@ -153,7 +153,11 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="part-a-same-angle-comparisons">Part A, same-angle comparisons</h4>
 <p>Each participant’s scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity <strong><em>in the same angle</em></strong>.</p>
 <p>For Controls this is <span class="math inline">\((45-1)=44\)</span> comparisons for each angle of each stimulus identity. For DPs this is <span class="math inline">\((15-1)=14\)</span> comparisons for each angle of each stimulus identity. For SRs this is <span class="math inline">\((15-1)=14\)</span> comparisons for each angle of each stimulus identity.</p>
-<p>The 44 (For Control group) comparisons for each participant’s scanpaths of each stimulus identity in a given angle are then averaged, to give the mean similarity of everyone elses’s similarity for that stimulus identity in that angle. Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately, collapsing over different angles of the stimulus identity and different stimulus identities at the same time.</p>
+<p>This is 12,000 rows. 75 subs x 40 stimulus identities x 4 angles. 45 columns for control; 15 for devprop and super: one column for each comparison.</p>
+<p>The 44 (For Control group) comparisons for each participant’s scanpaths of each stimulus identity in a given angle are then averaged, to give the mean similarity of everyone else’s similarity for that stimulus identity in that angle.</p>
+<p>This is 12,000 rows. 75 subs x 40 stimulus identities x 4 angles. 1 column representing the mean of all the comparisons (44 comparisons for control, 14 for devprop; 14 for super)</p>
+<p>Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately, collapsing over different angles of the stimulus identity and different stimulus identities at the same time.</p>
+<p>This is 150 rows, 75 participants in each of famous and novel, and one column for mean similarity.</p>
 <p>The similarity here refers to how alike the scanpaths are among different members of the same participant group when seeing the exact same picture (same angle of the same stimulus identity).</p>
 <div class="grid">
 <div class="g-col-6">
@@ -192,7 +196,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="bate-scan_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<p><img src="bate-scan_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
 </figure>
 </div>
 </div>
@@ -202,6 +206,7 @@ window.Quarto = {
 <div class="cell">
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
+<caption>Same-angle</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Effect</th>
@@ -217,7 +222,7 @@ window.Quarto = {
 <td style="text-align: left;">Ability</td>
 <td style="text-align: right;">2</td>
 <td style="text-align: right;">72</td>
-<td style="text-align: right;">28.235891</td>
+<td style="text-align: right;">28.24</td>
 <td style="text-align: right;">&lt;0.001</td>
 <td style="text-align: left;">***</td>
 </tr>
@@ -225,7 +230,7 @@ window.Quarto = {
 <td style="text-align: left;">Fame</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">72</td>
-<td style="text-align: right;">5.309582</td>
+<td style="text-align: right;">5.31</td>
 <td style="text-align: right;">0.024</td>
 <td style="text-align: left;">*</td>
 </tr>
@@ -233,7 +238,7 @@ window.Quarto = {
 <td style="text-align: left;">Ability:Fame</td>
 <td style="text-align: right;">2</td>
 <td style="text-align: right;">72</td>
-<td style="text-align: right;">9.236856</td>
+<td style="text-align: right;">9.24</td>
 <td style="text-align: right;">&lt;0.001</td>
 <td style="text-align: left;">***</td>
 </tr>
@@ -248,13 +253,106 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="part-b-different-angle-comparisons">Part B, different-angle comparisons</h4>
 <p>Each participant’s scanpath for a given stimulus identity in a given angle is compared to all the other participants in the same group seeing the same stimulus identity <strong><em>in the other three different angles</em></strong>.</p>
 <p>For Controls This will be <span class="math inline">\((45-1) * (4-1) = 132\)</span> comparisons per stimulus identity (44 for each angle of each stimulus identity). For DPs This will be <span class="math inline">\((15-1) * (4-1) = 42\)</span> comparisons per stimulus identity (14 for each angle of each stimulus identity). For SRs This will be <span class="math inline">\((15-1) * (4-1) = 42\)</span> comparisons per stimulus identity (14 for each angle of each stimulus identity).</p>
-<p>The 44 (For Control group) comparisons for each participant’s scanpaths of each stimulus identity are then averaged. Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately.</p>
+<p>This is 12,000 rows. 75 subs x 40 stimulus identities x 4 angles. 180 columns for control (75 subs x 4 angles per stimulus identity, with illegal same-subject and same-angle comparisons NA’d out); 60 for devprop and super: one column for each comparison.</p>
+<p>Next we average over the columns giving one column representing the average of the comparisons for a given face / subj / angle.</p>
+<p>This is 12,000 rows. 75 subs x 40 stimulus identities x 4 angles. 1 column representing the mean of all the comparisons</p>
+<p>The 44 (For Control group) comparisons for each participant’s scanpaths of each stimulus identity are then averaged, to give the mean similarity of everyone elses’s similarity for that stimulus identity in <strong>other</strong> angles.</p>
+<p>This is 150 rows, 75 participants in each of famous and novel, and one column for mean similarity.</p>
 <p>The similarity here refers to how alike the scanpaths of members of the same group were to different angles of the same face (different angles of the same stimulus identity).</p>
-<p>These data can then be entered entered into a 2 (familiarity: famous, novel) x 2 (image: same, different) x 3 (group: DP, SR control) mixed-measures ANOVA with repeated-measures on the familiarity and image factors.</p>
+<p>Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately.</p>
+<div class="grid">
+<div class="g-col-6">
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Different-angle</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Fame</th>
+<th style="text-align: center;">Prosopagnosic</th>
+<th style="text-align: center;">Control</th>
+<th style="text-align: center;">Super Recogniser</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Famous</td>
+<td style="text-align: center;">-0.103</td>
+<td style="text-align: center;">-0.080</td>
+<td style="text-align: center;">0.109</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Novel</td>
+<td style="text-align: center;">-0.078</td>
+<td style="text-align: center;">-0.091</td>
+<td style="text-align: center;">0.084</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="bate-scan_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="grid">
+<div class="g-col-6">
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Different angle</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Effect</th>
+<th style="text-align: right;">DFn</th>
+<th style="text-align: right;">DFd</th>
+<th style="text-align: right;">F</th>
+<th style="text-align: right;">p</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Ability</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">28.72</td>
+<td style="text-align: right;">&lt;0.001</td>
+<td style="text-align: left;">***</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fame</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">3.12</td>
+<td style="text-align: right;">0.081</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ability:Fame</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">9.00</td>
+<td style="text-align: right;">&lt;0.001</td>
+<td style="text-align: left;">***</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="combined-analysis-with-samediff-angle-as-a-factor" class="level4">
 <h4 class="anchored" data-anchor-id="combined-analysis-with-samediff-angle-as-a-factor">Combined analysis with same/diff angle as a factor</h4>
-<p>Hold my place</p>
+<p>These data can then be entered entered into a 2 (familiarity: famous, novel) x 2 (image: same, different) x 3 (group: DP, SR control) mixed-measures ANOVA with repeated-measures on the familiarity and image factors.</p>
 </section>
 </section>
 </section>
