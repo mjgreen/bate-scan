@@ -170,18 +170,13 @@ kable(ability_x_fame_3a, caption="Same-angle", digits=3, align=c('l','c','c','c'
 :::
 
 ```{r, out.width="60%"}
-ggplot(data3a, aes(x=Ability, y=Similarity, color=Fame, group=Fame, fill=Fame))+
+ggplot(data3a, aes(x=Ability, y=Similarity, group=interaction(Fame, Ability), color=Fame))+
   theme_bw()+
   theme(
     panel.grid.major = element_blank(), 
     panel.grid.minor = element_blank()
     ) +
-   stat_summary(
-     fun.data=mean_cl_normal,position=position_dodge(0.95),geom="errorbar", width=0.5
-     ) +
-  stat_summary(
-    fun=mean,position=position_dodge(width=0.95),geom="bar"
-    )+
+   geom_boxplot()+
   labs(y="Mean Similarity", title = "Mean similarity of scanpaths made to famous and novel faces, split by group\nSame-angle")
 ```
 
@@ -308,19 +303,14 @@ kable(ability_x_fame_3b, caption="Different-angle", digits=3, align=c('l','c','c
 :::
 :::
 
-```{r, out.width="60%"}
-ggplot(data3b, aes(x=Ability, y=Similarity, color=Fame, group=Fame, fill=Fame))+
+```{r, out.width="60%", warning=FALSE}
+ggplot(data3b, aes(x=Ability, y=Similarity, group=interaction(Fame, Ability), color=Fame))+
   theme_bw()+
   theme(
     panel.grid.major = element_blank(), 
     panel.grid.minor = element_blank()
     ) +
-   stat_summary(
-     fun.data=mean_cl_normal,position=position_dodge(0.95),geom="errorbar", width=0.5
-     ) +
-  stat_summary(
-    fun=mean,position=position_dodge(width=0.95),geom="bar"
-    )+
+   geom_boxplot()+
   labs(y="Mean Similarity", title = "Mean similarity of scanpaths made to famous and novel faces, split by group\nDifferent-angle")
 ```
 
@@ -364,3 +354,65 @@ kable(
 #### Combined analysis with same/diff angle as a factor
 
 These data can then be entered entered into a 2 (familiarity: famous, novel) x 2 (image: same, different) x 3 (group: DP, SR control) mixed-measures ANOVA with repeated-measures on the familiarity and image factors.
+
+
+```{r}
+combined = bind_rows(
+  data3a %>% mutate(Image='same') %>% relocate(Image),
+  data3b %>% mutate(Image='different') %>% relocate(Image)
+) %>% 
+  mutate(Image=as_factor(Image))
+write_csv(combined, "./analysis_3/combined/analysis_3_combined_data.csv")
+```
+
+
+
+
+
+```{r}
+ggplot(combined, aes(x=Ability, y=Similarity, group=interaction(Fame, Ability), color=Fame))+
+  facet_grid(~Image)+
+  theme_bw()+
+    # theme(
+    #   panel.grid.major = element_blank(), 
+    #   panel.grid.minor = element_blank()
+    #   ) +
+  geom_boxplot()+
+  labs(y="Mean Similarity", title = "Mean similarity of scanpaths made to famous and novel faces, split by group\nCombined Analysis")
+```
+
+
+```{r, warning=FALSE}
+combined_anova = 
+  ezANOVA(data=combined, dv=Similarity, wid=Subject, within=c(Fame,Image), between=Ability, return_aov = TRUE, type = 2) 
+# type 3 is SPSS, type 2 is better for unbalanced data
+
+orig=combined_anova
+combined_anova$ANOVA$ges <- NULL
+
+for (i in seq_along(combined_anova$ANOVA$p)) {
+  combined_anova$ANOVA$p[i] = round(as.numeric(combined_anova$ANOVA$p[i]),3)
+  if (combined_anova$ANOVA$p[i] < 0.05){combined_anova$ANOVA$`p<.05`[i] = "*"}
+  if (combined_anova$ANOVA$p[i] < 0.01){combined_anova$ANOVA$`p<.05`[i] = "**"}
+  if (combined_anova$ANOVA$p[i] < 0.001){combined_anova$ANOVA$`p<.05`[i] = "***"}
+  if (combined_anova$ANOVA$p[i] < 0.001){combined_anova$ANOVA$p[i]="<0.001"}
+}
+
+names(combined_anova$ANOVA)=c("Effect", "DFn", "DFd", "F", "p", " ")
+```
+
+
+::: {.grid}
+::: {.g-col-6}
+```{r, results='markup'}
+kable(
+  combined_anova$ANOVA, 
+  row.names=FALSE, 
+  digits = c( 0,  2,  2,  2,  3,  0),
+  align =  c('l','r','r','r','r','l'),
+  caption = "Combined analysis 3"
+  ) 
+```
+:::
+:::
+
