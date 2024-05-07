@@ -63,9 +63,11 @@ Other very recent research suggests an alternative hypothesis, arguing against t
 
 ## Data Analysis
 
+For analysis 1 and 2, see the relevant folders in the previous repository at [https://github.com/mjgreen/sarah](https://github.com/mjgreen/sarah).
+
 ### Analysis 1: Replication of the EMBME
 
-**EMBME: eye-movement based memory effect""
+**EMBME: eye-movement based memory effect**
 
 An initial analysis will seek to replicate the existing EMBME, where it has been shown that scanpaths elicited to  famous faces are less similar than those elicited to unknown (novel/distractor) faces. To do this we
 would need to, per participant:
@@ -133,6 +135,14 @@ mp3a = mean_path_similarity_per_path_3a %>%
 ```
 
 This is 150 rows, 75 participants in each of famous and novel, and one column for mean similarity.
+
+```{r}
+# wide
+mp3a.wide = mp3a %>% pivot_wider(id_cols = c(subj, ability), names_from = c(fame), values_from=mean_sim)
+write_csv(mp3a.wide, "analysis3a_wide.csv")
+```
+
+A version in wide-form is at [analysis3a_wide.csv](analysis3a_wide.csv)
 
 The similarity here refers to how alike the scanpaths are among different members of the same participant group when seeing the exact same picture (same angle of the same stimulus identity).
 
@@ -267,6 +277,14 @@ mp3b = mean_path_similarity_per_path_3b %>%
 
 This is 150 rows, 75 participants in each of famous and novel, and one column for mean similarity.
 
+```{r}
+# wide
+mp3b.wide = mp3b %>% pivot_wider(id_cols = c(subj, ability), names_from = c(fame), values_from=mean_sim)
+write_csv(mp3b.wide, "analysis3b_wide.csv")
+```
+
+A version in wide-form is at [analysis3b_wide.csv](analysis3b_wide.csv)
+
 The similarity here refers to  how alike the scanpaths of members of the same group were to different angles of the same face (different angles of the same stimulus identity).
 
 ```{r, echo=F}
@@ -349,12 +367,9 @@ kable(
 :::
 :::
 
-
-
 #### Combined analysis with same/diff angle as a factor
 
 These data can then be entered entered into a 2 (familiarity: famous, novel) x 2 (image: same, different) x 3 (group: DP, SR control) mixed-measures ANOVA with repeated-measures on the familiarity and image factors.
-
 
 ```{r}
 combined = bind_rows(
@@ -364,10 +379,6 @@ combined = bind_rows(
   mutate(Image=as_factor(Image))
 write_csv(combined, "./analysis_3/combined/analysis_3_combined_data.csv")
 ```
-
-
-
-
 
 ```{r}
 ggplot(combined, aes(x=Ability, y=Similarity, group=interaction(Fame, Ability), color=Fame))+
@@ -380,7 +391,6 @@ ggplot(combined, aes(x=Ability, y=Similarity, group=interaction(Fame, Ability), 
   geom_boxplot()+
   labs(y="Mean Similarity", title = "Mean similarity of scanpaths made to famous and novel faces, split by group\nCombined Analysis")
 ```
-
 
 ```{r, warning=FALSE}
 combined_anova = 
