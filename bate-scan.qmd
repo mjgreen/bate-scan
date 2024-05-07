@@ -139,7 +139,7 @@ This is 150 rows, 75 participants in each of famous and novel, and one column fo
 ```{r}
 # wide
 mp3a.wide = mp3a %>% pivot_wider(id_cols = c(subj, ability), names_from = c(fame), values_from=mean_sim)
-write_csv(mp3a.wide, "analysis3a_wide.csv")
+write_csv(mp3a.wide, "./analysis3/analysis3a/analysis3a_wide.csv")
 ```
 
 A version in wide-form is at [analysis3a_wide.csv](analysis3a_wide.csv)
@@ -280,10 +280,10 @@ This is 150 rows, 75 participants in each of famous and novel, and one column fo
 ```{r}
 # wide
 mp3b.wide = mp3b %>% pivot_wider(id_cols = c(subj, ability), names_from = c(fame), values_from=mean_sim)
-write_csv(mp3b.wide, "analysis3b_wide.csv")
+write_csv(mp3b.wide, "./analysis3/analysis3b/analysis3b_wide.csv")
 ```
 
-A version in wide-form is at [analysis3b_wide.csv](analysis3b_wide.csv)
+A version in wide-form is at [./analysis3/analysis3b_wide.csv](./analysis3/analysis3b_wide.csv)
 
 The similarity here refers to  how alike the scanpaths of members of the same group were to different angles of the same face (different angles of the same stimulus identity).
 
@@ -379,6 +379,13 @@ combined = bind_rows(
   mutate(Image=as_factor(Image))
 write_csv(combined, "./analysis_3/combined/analysis_3_combined_data.csv")
 ```
+
+```{r}
+combined.wide = pivot_wider(combined, id_cols=c(Subject, Ability), names_from=c(Fame,Image), values_from=Similarity)
+write_csv(combined.wide, "./analysis_3/combined/combined.wide.csv")
+```
+
+A wide version is at [./analysis_3/combined/combined.wide.csv](./analysis_3/analysis3a/combined.wide.csv).
 
 ```{r}
 ggplot(combined, aes(x=Ability, y=Similarity, group=interaction(Fame, Ability), color=Fame))+
