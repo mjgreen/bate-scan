@@ -6,7 +6,7 @@ format:
     toc-depth: 4
 ---
 
-This page is hosted from a github repository at [https://github.com/mjgreen/bate-scan](https://github.com/mjgreen/bate-scan).
+This page is hosted from a github repository at [https://github.com/mjgreen/bate-scan](https://github.com/mjgreen/bate-scan). The hosted page is [https://mjgreen.github.io/bate-scan/bate-scan.html](https://mjgreen.github.io/bate-scan/bate-scan.html).
 
 ```{r, echo=F}
 setwd("/home/matt/gits/bate-scan")
@@ -379,15 +379,14 @@ combined = bind_rows(
   data3b %>% mutate(Image='different') %>% relocate(Image)
 ) %>% 
   mutate(Image=as_factor(Image))
-write_csv(combined, "./analysis_3/combined/analysis_3_combined_data.csv")
 ```
 
 ```{r}
 combined.wide = pivot_wider(combined, id_cols=c(Subject, Ability), names_from=c(Fame,Image), values_from=Similarity)
-write_csv(combined.wide, "analysis_3/combined/combined.wide.csv")
+write_csv(combined.wide, "analysis_3/combined/analysis_3_combined_data.csv")
 ```
 
-A wide version is at [analysis_3/combined/combined.wide.csv](analysis_3/combined/combined.wide.csv).
+A wide version is at [analysis_3/combined/analysis_3_combined_data.csv](analysis_3/combined/analysis_3_combined_data.csv).
 
 ```{r}
 ggplot(combined, aes(x=Ability, y=Similarity, group=interaction(Fame, Ability), color=Fame))+
