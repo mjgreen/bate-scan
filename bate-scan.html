@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.553">
+<meta name="generator" content="quarto-1.4.549">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -159,7 +159,7 @@ window.Quarto = {
 <p>This is 12,000 rows. 75 subs x 40 stimulus identities x 4 angles. 1 column representing the mean of all the comparisons (44 comparisons for control, 14 for devprop; 14 for super)</p>
 <p>Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately, collapsing over different angles of the stimulus identity and different stimulus identities at the same time.</p>
 <p>This is 150 rows, 75 participants in each of famous and novel, and one column for mean similarity.</p>
-<p>A version in wide-form is at <a href="analysis3a_wide.csv">analysis3a_wide.csv</a></p>
+<p>A version in wide-form is at <a href="nalysis_3/analysis3a/analysis3a_wide.csv">analysis_3/analysis3a/analysis3a_wide.csv</a></p>
 <p>The similarity here refers to how alike the scanpaths are among different members of the same participant group when seeing the exact same picture (same angle of the same stimulus identity).</p>
 <div class="grid">
 <div class="g-col-6">
@@ -260,7 +260,7 @@ window.Quarto = {
 <p>This is 12,000 rows. 75 subs x 40 stimulus identities x 4 angles. 1 column representing the mean of all the comparisons</p>
 <p>The 44 (For Control group) comparisons for each participant’s scanpaths of each stimulus identity are then averaged, to give the mean similarity of everyone elses’s similarity for that stimulus identity in <strong>other</strong> angles.</p>
 <p>This is 150 rows, 75 participants in each of famous and novel, and one column for mean similarity.</p>
-<p>A version in wide-form is at <a href="analysis3b_wide.csv">analysis3b_wide.csv</a></p>
+<p>A version in wide-form is at <a href="analysis_3/analysis3b/analysis3b_wide.csv">analysis_3/analysis3b/analysis3b_wide.csv</a></p>
 <p>The similarity here refers to how alike the scanpaths of members of the same group were to different angles of the same face (different angles of the same stimulus identity).</p>
 <p>Then the comparisons for famous stimulus identities and novel stimulus identities are averaged separately.</p>
 <div class="grid">
@@ -356,7 +356,7 @@ window.Quarto = {
 <section id="combined-analysis-with-samediff-angle-as-a-factor" class="level4">
 <h4 class="anchored" data-anchor-id="combined-analysis-with-samediff-angle-as-a-factor">Combined analysis with same/diff angle as a factor</h4>
 <p>These data can then be entered entered into a 2 (familiarity: famous, novel) x 2 (image: same, different) x 3 (group: DP, SR control) mixed-measures ANOVA with repeated-measures on the familiarity and image factors.</p>
-<p>A wide version is at <a href="%22./analysis_3/combined.wide.csv%22">./analysis_3/combined.wide.csv</a>.</p>
+<p>A wide version is at <a href="analysis_3/combined/combined.wide.csv">analysis_3/combined/combined.wide.csv</a>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -530,24 +530,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -582,11 +564,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
+      return note.innerHTML;
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
