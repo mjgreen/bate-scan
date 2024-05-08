@@ -383,10 +383,10 @@ combined = bind_rows(
 
 ```{r}
 combined.wide = pivot_wider(combined, id_cols=c(Subject, Ability), names_from=c(Fame,Image), values_from=Similarity)
-write_csv(combined.wide, "analysis_3/combined/analysis_3_combined_data.csv")
+write_csv(combined.wide, "analysis_3/combined/analysis_3_combined_wide.csv")
 ```
 
-A wide version is at [analysis_3/combined/analysis_3_combined_data.csv](analysis_3/combined/analysis_3_combined_data.csv).
+A wide version is at [analysis_3/combined/analysis_3_combined_wide.csv](analysis_3/combined/analysis_3_combined_wide.csv).
 
 ```{r}
 ggplot(combined, aes(x=Ability, y=Similarity, group=interaction(Fame, Ability), color=Fame))+
